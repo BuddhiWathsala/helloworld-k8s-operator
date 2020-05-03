@@ -104,7 +104,7 @@ func (r *ReconcileHelloWorld) Reconcile(request reconcile.Request) (reconcile.Re
 		return reconcile.Result{}, err
 	}
 
-	// Create Deployment
+	// Create a Deployment
 	foundDeployment := &appsv1.Deployment{}
 	err = r.client.Get(context.TODO(), types.NamespacedName{Name: deployment.Name, Namespace: deployment.Namespace}, foundDeployment)
 	if err != nil && errors.IsNotFound(err) {
@@ -114,7 +114,7 @@ func (r *ReconcileHelloWorld) Reconcile(request reconcile.Request) (reconcile.Re
 		}
 	}
 
-	// Create Service
+	// Create a Service
 	foundService := &corev1.Service{}
 	err = r.client.Get(context.TODO(), types.NamespacedName{Name: service.Name, Namespace: service.Namespace}, foundService)
 	if err != nil && errors.IsNotFound(err) {
