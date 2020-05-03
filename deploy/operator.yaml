@@ -16,7 +16,7 @@ spec:
       containers:
         - name: helloworld-k8s-operator
           # Replace this with the built image name
-          image: REPLACE_IMAGE
+          image: buddhiwathsala/helloworld-k8s-operator:v0.1.0
           command:
           - helloworld-k8s-operator
           imagePullPolicy: Always
