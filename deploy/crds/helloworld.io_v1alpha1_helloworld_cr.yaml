@@ -3,5 +3,4 @@ kind: HelloWorld
 metadata:
   name: example-helloworld
 spec:
-  # Add fields here
   size: 1
