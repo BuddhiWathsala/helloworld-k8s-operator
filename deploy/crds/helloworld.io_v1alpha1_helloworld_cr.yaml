@@ -1,6 +1,6 @@
 apiVersion: helloworld.io/v1alpha1
 kind: HelloWorld
 metadata:
-  name: example-helloworld
+  name: example-helloworld1
 spec:
   size: 1

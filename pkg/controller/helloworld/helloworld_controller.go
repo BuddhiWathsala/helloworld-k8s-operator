@@ -6,6 +6,7 @@ import (
 	helloworldv1alpha1 "github.com/BuddhiWathsala/helloworld-k8s-operator/pkg/apis/helloworld/v1alpha1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
+	extensionsv1beta1 "k8s.io/api/extensions/v1beta1"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -95,12 +96,16 @@ func (r *ReconcileHelloWorld) Reconcile(request reconcile.Request) (reconcile.Re
 	// Define a new Deployment and Service objects
 	deployment := newDeployment(instance)
 	service := newService(instance)
+	ingress := newNginxIngress(instance)
 
 	// Set HelloWorld instance as the owner and controller
 	if err := controllerutil.SetControllerReference(instance, deployment, r.scheme); err != nil {
 		return reconcile.Result{}, err
 	}
 	if err := controllerutil.SetControllerReference(instance, service, r.scheme); err != nil {
+		return reconcile.Result{}, err
+	}
+	if err := controllerutil.SetControllerReference(instance, ingress, r.scheme); err != nil {
 		return reconcile.Result{}, err
 	}
 
@@ -120,7 +125,17 @@ func (r *ReconcileHelloWorld) Reconcile(request reconcile.Request) (reconcile.Re
 	if err != nil && errors.IsNotFound(err) {
 		err = r.client.Create(context.TODO(), service)
 		if err == nil {
-			reqLogger.Info("Creating a new Service", "Service.Namespace", deployment.Namespace, "Service.Name", deployment.Name)
+			reqLogger.Info("Creating a new Service", "Service.Namespace", service.Namespace, "Service.Name", service.Name)
+		}
+	}
+
+	// Create an Ingress
+	foundIngress := &extensionsv1beta1.Ingress{}
+	err = r.client.Get(context.TODO(), types.NamespacedName{Name: ingress.Name, Namespace: ingress.Namespace}, foundIngress)
+	if err != nil && errors.IsNotFound(err) {
+		err = r.client.Create(context.TODO(), ingress)
+		if err == nil {
+			reqLogger.Info("Creating a new Ingress", "Ingress.Namespace", ingress.Namespace, "Ingress.Name", ingress.Name)
 			return reconcile.Result{}, nil
 		}
 		return reconcile.Result{}, err
