@@ -32,7 +32,7 @@ func newDeployment(cr *helloworldv1alpha1.HelloWorld) *appsv1.Deployment {
 					Containers: []corev1.Container{
 						{
 							Name:            "helloworld",
-							Image:           "docker.io/buddhiwathsala/helloworld-goapp:v0.1.0",
+							Image:           "docker.io/buddhiwathsala/helloworld-goapp:v0.3.0",
 							Command:         []string{"go", "run", "hello-world.go"},
 							ImagePullPolicy: corev1.PullAlways,
 						},

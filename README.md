@@ -27,15 +27,15 @@ As described in the prerequisites section, to run or build the operator we need 
 
 Install the prerequisites.
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.2.0/deploy/crds/helloworld.io_helloworlds_crd.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.2.0/deploy/service_account.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.2.0/deploy/role.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.2.0/deploy/role_binding.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/crds/helloworld.io_helloworlds_crd.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/service_account.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/role.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/role_binding.yaml
 ```
 Install the operator deployment.
 
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.2.0/deploy/operator.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/operator.yaml
 ```
 
 ## Deploy an Example
@@ -52,7 +52,7 @@ spec:
 
 Apply the HelloWorld example using the following command.
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.2.0/deploy/crds/helloworld.io_v1alpha1_helloworld_cr.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/crds/helloworld.io_v1alpha1_helloworld_cr.yaml
 ```
 
 These commands will create the following Kubernetes artifacts in your cluster.
@@ -82,7 +82,7 @@ Forwarding from [::1]:8081 -> 8080
 Now, we can send requests to the deployed HelloWorld service from our local machine.
 
 ```sh
-curl localhost:8080/HelloWorld
+curl localhost:8081/HelloWorld
 ```
 
 The deployed HelloWorld pod will log as follows.
