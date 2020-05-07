@@ -27,15 +27,15 @@ As described in the prerequisites section, to run or build the operator we need 
 
 Install the prerequisites.
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/crds/helloworld.io_helloworlds_crd.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/service_account.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/role.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/role_binding.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.4.0/deploy/crds/helloworld.io_helloworlds_crd.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.4.0/deploy/service_account.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.4.0/deploy/role.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.4.0/deploy/role_binding.yaml
 ```
 Install the operator deployment.
 
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/operator.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.4.0/deploy/operator.yaml
 ```
 
 ## Deploy an Example
@@ -52,7 +52,7 @@ spec:
 
 Apply the HelloWorld example using the following command.
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.3.0/deploy/crds/helloworld.io_v1alpha1_helloworld_cr.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/BuddhiWathsala/helloworld-k8s-operator/v0.4.0/deploy/crds/helloworld.io_v1alpha1_helloworld_cr.yaml
 ```
 
 These commands will create the following Kubernetes artifacts in your cluster.
@@ -72,17 +72,27 @@ kubernetes                        ClusterIP   10.96.0.1        <none>        443
 
 ## Send Requests
 
-The Go application that we just deployed using this `helloworld-k8s-operator`, received HTTP GET requests and send the received payload back to the caller. However, we cannot send the requests straight away since we do not expose the deployed service outside. To expose the HelloWorld service we have to use Kubernetes port forward as follows.
+The Go application that we just deployed using this `helloworld-k8s-operator`, received HTTP GET requests and send the received payload back to the caller. Here we are using NGINX ingress controller to pass the requests to the service, so that first we need to setup the NGINX ingress controller in our Kubernetes cluster. To setup it please refer to [this documentation](https://kubernetes.github.io/ingress-nginx/deploy/).
+
+Here, the helloworld operator, setup an ingress for the host called `helloworld`, therefore we need to set the external IP of the ingress with this hostname. To do that we can obtain the external IP of the ingress using the following command. 
+
 ```sh
-➜  ~ kubectl port-forward svc/example-helloworld 8081:8080
-Forwarding from 127.0.0.1:8081 -> 8080
-Forwarding from [::1]:8081 -> 8080
+$ kubectl get ing
 ```
 
-Now, we can send requests to the deployed HelloWorld service from our local machine.
+Note that, for minikube, the external IP is the minikube IP and we can get the minikube IP using the following command.
 
 ```sh
-curl localhost:8081/HelloWorld
+$ minikube ip
+```
+
+Now we can add the above host (`helloworld`) as an entry in `/etc/hosts` file.
+
+Now, we can send requests to the deployed HelloWorld service from our local machine and the request URL is as follows.
+
+```sh
+$ curl http://helloworld/<CUSTOM_RESOURCE_NAME>/<MESSAGE>
+$ curl http://helloworld/example-helloworld/HelloWorld
 ```
 
 The deployed HelloWorld pod will log as follows.
@@ -97,3 +107,4 @@ The deployed HelloWorld pod will log as follows.
 
 1. https://github.com/operator-framework/operator-sdk/blob/v0.17.0/website/content/en/docs/golang/quickstart.md
 1. https://github.com/siddhi-io/siddhi-operator
+1. https://kubernetes.github.io/ingress-nginx/deploy/
