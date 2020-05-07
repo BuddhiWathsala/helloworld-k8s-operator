@@ -118,7 +118,6 @@ func (r *ReconcileHelloWorld) Reconcile(request reconcile.Request) (reconcile.Re
 	foundService := &corev1.Service{}
 	err = r.client.Get(context.TODO(), types.NamespacedName{Name: service.Name, Namespace: service.Namespace}, foundService)
 	if err != nil && errors.IsNotFound(err) {
-
 		err = r.client.Create(context.TODO(), service)
 		if err == nil {
 			reqLogger.Info("Creating a new Service", "Service.Namespace", deployment.Namespace, "Service.Name", deployment.Name)
